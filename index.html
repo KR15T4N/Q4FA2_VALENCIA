@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>
+    </title>
+</head>
+<body>
+
+    <h2>Canteen Pre-Order Form</h2>
+
+    <form onsubmit="return printReceipt()">
+
+        <label for="name">Full Name:</label>
+        <input type="text" id="name" required><br><br>
+
+        <label for="section">Grade & Section:</label>
+        <input type="text" id="section" required><br><br>
+
+        <label for="meal">Select Meal:</label>
+        <select id="meal">
+            <option value="Chicken meal">Chicken meal</option>
+            <option value="Pork meal">Pork meal</option>
+            <option value="Beef meal">Beef meal</option>
+        </select><br><br>
+
+        <label for="qty">Quantity:</label>
+        <input type="number" id="qty" min="1" max="10" required><br><br>
+
+        <label for="type">Customer Type:</label>
+        <select id="type">
+            <option value="Student">Student</option>
+            <option value="Faculty">Faculty/Staff</option>
+        </select><br><br>
+
+        <input type="submit" value="Place Order">
+    </form>
+
+    <hr>
+
+    <div id="output"></div>
+
+    <script>
+        //reprints the form 
+        function printReceipt() {
+            let name = document.getElementById("name").value;
+            let section = document.getElementById("section").value;
+            let meal = document.getElementById("meal").value;
+            let qty = parseInt(document.getElementById("qty").value);
+            let type = document.getElementById("type").value;
+
+            let price = calculateSubtotal(meal, qty); //calculates original total
+            let discount = calculateDiscount(price, type); //calculates the discount
+            let total = price - discount; // calculates the final total
+
+
+            //${content} basically js lets you input the variables directly in string
+            document.getElementById("output").innerHTML = `
+                <h3>Order Summary</h3>
+                Name: ${name} <br>
+                Section: ${section} <br>
+                Meal: ${meal} <br>
+                Quantity: ${qty} <br>
+                Customer Type: ${type} <br>
+                Subtotal: ₱${price} <br>
+                Discount: ₱${discount} <br>
+                <strong>Total: ₱${total}</strong>
+            `;
+
+            return false; // prevents page reload
+        }
+
+        function calculateSubtotal(order, quantity) {
+            let price;
+
+            switch(order) {
+                case "Chicken meal":
+                    price = 75;
+                    break;
+                case "Pork meal":
+                    price = 85;
+                    break;
+                case "Beef meal":
+                    price = 105;
+                    break;
+                default:
+                    return "Item not found";
+            }
+
+            return price * quantity;
+        }
+
+        function calculateDiscount(total, custType) {
+            if (custType === "Student") { 
+                return total * 0.20;
+            } else {
+                return 0;
+            }
+        }
+    </script>
+
+</body>
+</html>
